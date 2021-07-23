@@ -1,5 +1,30 @@
 import { API, onFetchStart, onFetchEnd } from "./app.js";
 
+// const fetchCategories = async ({ root, resources: { classification, century }, key }) => {
+//     onFetchStart();
+//     if (localStorage.getItem('classifications') && localStorage.getItem('centuries')) return JSON.parse(localStorage.getItem('classifications', 'centuries'));
+//     const classificationsURL = `${root}/${classification}?${key}&size=100&sort=name`;
+//     const centuriesURL = `${root}/${century}?${key}&size=100&sort=temporalorder`;
+
+//     try {
+//         const classificationsResponse = await fetch(classificationsURL);
+//         const classificationsData = await classificationsResponse.json();
+//         const classificationsRecords = classificationsData.records;
+//         localStorage.setItem('classifications', JSON.stringify(classificationsRecords));
+//         const centuriesResponse = await fetch((centuriesURL));
+//         const centuriesData = await centuriesResponse.json();
+//         const centuriesRecords = centuriesData.records;
+//         localStorage.setItem('centuries', JSON.stringify(centuriesRecords));
+//         console.log(centuriesRecords, classificationsRecords);
+//         // return [classificationsRecords, centuriesRecords];
+//         return { classificationsRecords, centuriesRecords };
+//     } catch (error) {
+//         console.error(error);
+//     } finally {
+//         onFetchEnd();
+//     }
+// };
+
 const fetchAllCenturies = async ({ root, resources: { century }, key }) => {
     onFetchStart();
     if (localStorage.getItem('centuries')) return JSON.parse(localStorage.getItem('centuries'));
@@ -43,15 +68,19 @@ const prefetchCategoryLists = async () => {
             fetchAllClassifications(API),
             fetchAllCenturies(API)
         ]);
+        // const classifications = await fetchCategories(API);
+        // const centuries = await fetchCategories(API);
+
         $('.classification-count').text(`(${classifications.length})`);
+        $('.century-count').text(`(${centuries.length}))`);
         classifications.forEach(classification => {
             $('#select-classification').append(`<option value="${classification.name}">${classification.name}</option>`);
         });
-
-        $('.century-count').text(`(${centuries.length}))`);
         centuries.forEach(century => {
             $('#select-century').append(`<option value="${century.name}">${century.name}</option>`);
         });
+
+
     } catch (error) {
         console.error(error);
     }

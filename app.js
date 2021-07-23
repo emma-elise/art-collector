@@ -19,9 +19,7 @@ const fetchObjects = async () => {
     onFetchStart();
     const baseURL = `${API.root}/${API.resources.object}?${API.key}`;
     try {
-        const res = await fetch((baseURL));
-        const data = await res.json();
-        return data;
+        return await (await fetch(baseURL)).json();
     } catch (error) {
         console.error(error);
     } finally {

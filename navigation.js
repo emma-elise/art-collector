@@ -5,12 +5,11 @@ import { renderFeature } from './summary.js';
 
 
 const clickEvents = () => {
+
     $('#search').on('submit', async function (event) {
         event.preventDefault();
         try {
-            const url = await buildSearchString(API);
-            const res = await fetch(url);
-            const { records, info } = await res.json();
+            const { records, info } = await (await fetch(buildSearchString(API))).json();
             updatePreview(records, info);
         } catch (error) {
             console.error(error);
@@ -20,9 +19,7 @@ const clickEvents = () => {
     $('#preview .next, #preview .previous').on('click', async function () {
         onFetchStart();
         try {
-            const url = $(this).data('url');
-            const res = await fetch(url);
-            const { info, records } = await res.json();
+            const { records, info } = await (await fetch($(this).data('url'))).json();
             updatePreview(records, info);
         } catch (error) {
             console.error(error);
@@ -34,8 +31,7 @@ const clickEvents = () => {
     $('#preview').on('click', '.object-preview', function (event) {
         event.preventDefault();
         const objectPreview = $(this).closest('.object-preview').data('record');
-        const feature = $('#feature');
-        feature.html(renderFeature(objectPreview));
+        $('#feature').html(renderFeature(objectPreview));
     });
 
     $('#feature').on('click', 'a', async function (event) {
@@ -44,8 +40,6 @@ const clickEvents = () => {
         event.preventDefault();
         onFetchStart();
         try {
-            const res = await fetch((href));
-            const { records, info } = await res.json();
             updatePreview(records, info);
         } catch (error) {
             console.error(error);
