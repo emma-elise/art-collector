@@ -1,4 +1,4 @@
-import { prefetchCategoryLists } from './category.js';
+import { fetchCategories } from './category.js';
 import { clickEvents } from './navigation.js';
 
 const API = {
@@ -15,9 +15,9 @@ const onFetchStart = () => $('#loading').addClass('active');
 
 const onFetchEnd = () => $('#loading').removeClass('active');
 
-const fetchObjects = async () => {
+const fetchObjects = async ({ root, resources: { object }, key } = API) => {
     onFetchStart();
-    const baseURL = `${API.root}/${API.resources.object}?${API.key}`;
+    const baseURL = `${root}/${object}?${key}`;
     try {
         return await (await fetch(baseURL)).json();
     } catch (error) {
@@ -27,7 +27,7 @@ const fetchObjects = async () => {
     }
 };
 
-prefetchCategoryLists();
+fetchCategories();
 fetchObjects();
 clickEvents();
 

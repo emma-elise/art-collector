@@ -35,11 +35,12 @@ const clickEvents = () => {
     });
 
     $('#feature').on('click', 'a', async function (event) {
+        event.preventDefault();
         const href = $(this).attr('href');
         if (href.startsWith('mailto')) return;
-        event.preventDefault();
         onFetchStart();
         try {
+            const { records, info } = await (await fetch((href))).json();
             updatePreview(records, info);
         } catch (error) {
             console.error(error);
